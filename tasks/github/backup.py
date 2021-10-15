@@ -19,7 +19,7 @@ for repo in client.get_organization('dadabhagwan').get_repos():
         present=True,
     )
 
-    if repo.name != 'mba-sys':
+    if repo.name != 'mba-sys' or repo.archived:
         continue
     
     pip.venv(
@@ -32,12 +32,19 @@ for repo in client.get_organization('dadabhagwan').get_repos():
         virtualenv='./venv'
     )
 
+    # git.repo(
+    #     name='Clone repo',
+    #     src='https://github.com/Fizzadar/pyinfra.git',
+    #     dest='dest',
+    #     # branch=None,  # use the default branch
+    # )
+
     # server.shell(commands=[f"gh2md {repo.full_name} --multiple-files ./{date_prefix}/issues/{repo.name}"])
 
     # Clone the repo
     git.repo(
-        src=repo.url,
-        dest=f"./{date_prefix}/{repo.full_name}",
+        src=repo.ssh_url,
+        dest=f"{date_prefix}/{repo.full_name}",
         branch=None
     )
     # gh2md sarabander/sicp sicp-issues --multiple-files --no-closed-prs
